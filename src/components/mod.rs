@@ -1,11 +1,14 @@
 use crate::constants::*;
 use crate::util::*;
 use amethyst::{
+    assets::Handle,
     core::*,
     ecs::{Component, DenseVecStorage},
     prelude::*,
+    renderer::*,
 };
 
+#[allow(unused)]
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum Orientation {
     Up,
@@ -14,11 +17,23 @@ pub enum Orientation {
     Right,
 }
 
+#[allow(unused)]
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum SegmentType {
     Head,
     Body,
     Tail,
+}
+
+impl SegmentType {
+    fn sprite_number(&self) -> usize {
+        use SegmentType::*;
+        match *self {
+            Head => sprites::HEAD_IDX,
+            Body => sprites::BODY_IDX,
+            Tail => sprites::TAIL_IDX,
+        }
+    }
 }
 
 /// A Snake Segment... A Snekment!
@@ -35,7 +50,7 @@ impl Component for Snekment {
 }
 
 impl Snekment {
-    fn new(seg_type: SegmentType) -> Self {
+    pub fn new(seg_type: SegmentType) -> Self {
         Self {
             seg_type,
             orientation: Orientation::Right,
@@ -44,13 +59,30 @@ impl Snekment {
         }
     }
 
-    fn init(world: &mut World, seg_type: SegmentType, pos: position::Relative) {
+    pub fn init(
+        world: &mut World,
+        seg_type: SegmentType,
+        pos: position::Relative,
+        sprite_sheet: Handle<SpriteSheet>,
+    ) {
         let pos = pos.to_absolute();
         let mut transform = Transform::default();
         transform.set_translation_xyz(pos.0, pos.1, 0.);
 
         let segment = Snekment::new(seg_type);
 
-        world.create_entity().with(segment).with(transform).build();
+        let sprite_number = seg_type.sprite_number();
+
+        let renderer = SpriteRender {
+            sprite_sheet,
+            sprite_number,
+        };
+
+        world
+            .create_entity()
+            .with(segment)
+            .with(transform)
+            .with(renderer)
+            .build();
     }
 }

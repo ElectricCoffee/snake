@@ -18,7 +18,7 @@ impl SimpleState for MainState {
         world.register::<Snekment>();
 
         init_camera(world);
-        //SnakeSegment::init(world, SegmentType::Head)
+        Snekment::init(world, SegmentType::Head, pos, sprite_sheet);
     }
 }
 
