@@ -1,4 +1,5 @@
 use crate::constants::*;
+use crate::util::position::RichPosition;
 use crate::util::*;
 use amethyst::{
     assets::Handle,
@@ -39,10 +40,10 @@ impl SegmentType {
 /// A Snake Segment... A Snekment!
 #[derive(Debug)]
 pub struct Snekment {
-    orientation: Orientation,
-    seg_type: SegmentType,
-    width: f32,
-    height: f32,
+    pub orientation: Orientation,
+    pub seg_type: SegmentType,
+    pub width: f32,
+    pub height: f32,
 }
 
 impl Component for Snekment {
