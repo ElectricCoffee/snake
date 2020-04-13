@@ -6,6 +6,7 @@ mod types;
 mod util;
 
 use amethyst::{
+    core::frame_limiter::FrameRateLimitStrategy,
     core::transform::TransformBundle,
     input::{InputBundle, StringBindings},
     prelude::*,
@@ -18,6 +19,7 @@ use amethyst::{
 };
 
 use states::*;
+use std::time::Duration;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -44,7 +46,13 @@ fn main() -> amethyst::Result<()> {
         .with(systems::SnakeInput, "snake_input", &["input_system"])
         .with(systems::Movement, "movement_system", &["snake_input"]);
 
-    let mut game = Application::new(assets_dir, MainState, game_data)?;
+    let mut game = Application::build(assets_dir, MainState)?
+        .with_frame_limit(
+            FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(2)),
+            10,
+        )
+        .build(game_data)?;
+
     game.run();
 
     Ok(())
