@@ -39,7 +39,13 @@ fn main() -> amethyst::Result<()> {
     let game_data = GameDataBuilder::default()
         .with_bundle(rendering_bundle)?
         .with_bundle(TransformBundle::new())?
-        .with_bundle(input_bundle)?;
+        .with_bundle(input_bundle)?
+        .with(systems::SnakeInput, "snake_input", &["input_system"])
+        .with(
+            systems::Movement::default(),
+            "movement_system",
+            &["snake_input"],
+        );
 
     let mut game = Application::new(assets_dir, MainState, game_data)?;
     game.run();

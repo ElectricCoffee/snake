@@ -6,7 +6,11 @@ use amethyst::{
     renderer::*,
 };
 
-use crate::{components::*, constants::*, util::position};
+use crate::{
+    components::*,
+    constants::*,
+    util::position::{self, RichPosition},
+};
 
 pub struct MainState;
 
