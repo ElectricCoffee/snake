@@ -41,6 +41,7 @@ impl<'s> System<'s> for Movement {
                     // Technically not necessary, but if a tail segment passes over a coordinate, it'll be removed from the list
                     // This is unnecessary because of what the Head does. Technically only either the head or tail logics are required.
                     SegmentType::Tail => {
+                        snekment.orientation = history[&relative_pos];
                         history.remove(&relative_pos);
                     }
                 }
