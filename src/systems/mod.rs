@@ -1,18 +1,5 @@
-use crate::components::Snekment;
-use amethyst::core::Transform;
-use amethyst::ecs::prelude::*;
+mod movement;
+mod snake_input;
 
-//#[derive(SystemDesc)]
-pub struct Movement;
-
-impl<'s> System<'s> for Movement {
-    type SystemData = (
-        ReadStorage<'s, Snekment>,
-        WriteStorage<'s, Transform>,
-        Entities<'s>,
-    );
-
-    fn run(&mut self, (snekments, mut transforms, entities): Self::SystemData) {
-        for (snekment, transform) in (&snekments, &mut transforms).join() {}
-    }
-}
+pub use movement::*;
+pub use snake_input::*;
