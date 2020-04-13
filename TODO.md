@@ -1,7 +1,8 @@
 # The file of things yet to do.
 
-- [ ] Implement the textures
-- [ ] Add movement logic
+- [x] Implement the textures
+- [x] Add movement logic
+  - [ ] Add logic for handling sprite rotation
 - [ ] Add collision logic
 - [ ] Add fruit spawner
 
@@ -17,12 +18,12 @@ The snake itself, or each individual segment?
 The snake is the entity and each segment is a component.
 Trouble immediately rears its ugly head, as it suddenly stops being obvious how one would keep track of every segment's position.
 
-### Option 2: The segment is the Entity
+### Option 2: The segment is the Entity [CHOSEN STRATEGY]
 
 Each segment is an entity with an associated transform in and of itself.
 This has the obvious benefit that the position of a segment is always known and accounted for.
 
-#### Turning Option 1: Follow the leader
+#### Turning Option 1: Follow the leader [CHOSEN STRATEGY]
 
 Turning would be accomplished by updating the orientation fo the head, and then let all the other segments follow suit.
 
