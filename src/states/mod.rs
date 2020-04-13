@@ -9,6 +9,7 @@ use amethyst::{
 use crate::{
     components::*,
     constants::*,
+    types::History,
     util::position::{self, RichPosition},
 };
 
@@ -20,6 +21,7 @@ impl SimpleState for MainState {
         let pos = position::Absolute(ARENA_CENTER_X, ARENA_CENTER_Y).to_relative();
         let sprite_sheet = load_sprite_sheet(world);
         world.register::<Snekment>();
+        world.insert(History::default());
 
         init_camera(world);
         Snekment::init(world, SegmentType::Head, pos, sprite_sheet);

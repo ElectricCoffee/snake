@@ -1,5 +1,10 @@
-use crate::components::{Orientation, SegmentType, Snekment};
+use crate::{
+    components::{Orientation, SegmentType, Snekment},
+    types::History,
+    util::position::RichPosition,
+};
 use amethyst::{
+    core::Transform,
     derive::SystemDesc,
     ecs::prelude::*,
     input::{InputHandler, StringBindings},
@@ -11,16 +16,20 @@ pub struct SnakeInput;
 impl<'s> System<'s> for SnakeInput {
     type SystemData = (
         WriteStorage<'s, Snekment>,
+        ReadStorage<'s, Transform>,
         Read<'s, InputHandler<StringBindings>>,
+        Write<'s, History>,
     );
 
-    fn run(&mut self, (mut snekments, input): Self::SystemData) {
-        for snekment in (&mut snekments).join() {
+    fn run(&mut self, (mut snekments, transforms, input, mut history): Self::SystemData) {
+        for (snekment, transform) in (&mut snekments, &transforms).join() {
             if snekment.seg_type == SegmentType::Head {
                 let x_dir = input.axis_value("horizontal");
                 let y_dir = input.axis_value("vertical");
                 if let Some(direction) = get_direction(x_dir, y_dir) {
                     snekment.orientation = direction;
+                    let rel_pos = transform.translation().to_relative();
+                    history.insert(rel_pos, snekment.orientation);
                 }
             }
         }

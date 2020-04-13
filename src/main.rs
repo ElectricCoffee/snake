@@ -2,6 +2,7 @@ mod components;
 mod constants;
 mod states;
 mod systems;
+mod types;
 mod util;
 
 use amethyst::{
@@ -41,11 +42,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
         .with(systems::SnakeInput, "snake_input", &["input_system"])
-        .with(
-            systems::Movement::default(),
-            "movement_system",
-            &["snake_input"],
-        );
+        .with(systems::Movement, "movement_system", &["snake_input"]);
 
     let mut game = Application::new(assets_dir, MainState, game_data)?;
     game.run();
