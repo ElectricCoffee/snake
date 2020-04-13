@@ -10,7 +10,7 @@ use crate::{
     components::*,
     constants::*,
     types::History,
-    util::position::{self, RichPosition},
+    util::position::{self, Relative, RichPosition},
 };
 
 pub struct MainState;
@@ -24,7 +24,19 @@ impl SimpleState for MainState {
         world.insert(History::default());
 
         init_camera(world);
-        Snekment::init(world, SegmentType::Head, pos, sprite_sheet);
+        Snekment::init(world, SegmentType::Head, pos, sprite_sheet.clone());
+        Snekment::init(
+            world,
+            SegmentType::Body,
+            pos + Relative(-1, 0),
+            sprite_sheet.clone(),
+        );
+        Snekment::init(
+            world,
+            SegmentType::Tail,
+            pos + Relative(-2, 0),
+            sprite_sheet,
+        );
     }
 }
 
