@@ -18,6 +18,10 @@ pub enum Orientation {
     Right,
 }
 
+impl Component for Orientation {
+    type Storage = DenseVecStorage<Self>;
+}
+
 #[allow(unused)]
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum SegmentType {
@@ -40,7 +44,6 @@ impl SegmentType {
 /// A Snake Segment... A Snekment!
 #[derive(Debug)]
 pub struct Snekment {
-    pub orientation: Orientation,
     pub seg_type: SegmentType,
     pub width: f32,
     pub height: f32,
@@ -54,7 +57,6 @@ impl Snekment {
     pub fn new(seg_type: SegmentType) -> Self {
         Self {
             seg_type,
-            orientation: Orientation::Right,
             width: SPRITE_WIDTH,
             height: SPRITE_HEIGHT,
         }
@@ -84,6 +86,7 @@ impl Snekment {
             .with(segment)
             .with(transform)
             .with(renderer)
+            .with(Orientation::Right)
             .build();
     }
 }

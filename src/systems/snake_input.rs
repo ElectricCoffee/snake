@@ -17,19 +17,20 @@ impl<'s> System<'s> for SnakeInput {
     type SystemData = (
         WriteStorage<'s, Snekment>,
         ReadStorage<'s, Transform>,
+        WriteStorage<'s, Orientation>,
         Read<'s, InputHandler<StringBindings>>,
         Write<'s, History>,
     );
 
-    fn run(&mut self, (mut snekments, transforms, input, mut history): Self::SystemData) {
-        for (snekment, transform) in (&mut snekments, &transforms).join() {
+    fn run(&mut self, (mut snekments, transforms, mut orientations, input, mut history): Self::SystemData) {
+        for (snekment, transform, orientation) in (&mut snekments, &transforms, &mut orientations).join() {
             if snekment.seg_type == SegmentType::Head {
                 let x_dir = input.axis_value("horizontal");
                 let y_dir = input.axis_value("vertical");
                 if let Some(direction) = get_direction(x_dir, y_dir) {
-                    snekment.orientation = direction;
+                    *orientation = direction;
                     let rel_pos = transform.translation().to_relative();
-                    history.insert(rel_pos, snekment.orientation);
+                    history.insert(rel_pos, *orientation);
                 }
             }
         }

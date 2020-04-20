@@ -12,15 +12,16 @@ impl<'s> System<'s> for Movement {
     type SystemData = (
         WriteStorage<'s, Snekment>,
         WriteStorage<'s, Transform>,
+        WriteStorage<'s, Orientation>,
         Write<'s, History>,
     );
 
-    fn run(&mut self, (mut snekments, mut transforms, mut history): Self::SystemData) {
-        for (snekment, transform) in (&mut snekments, &mut transforms).join() {
+    fn run(&mut self, (mut snekments, mut transforms, mut orientations, mut history): Self::SystemData) {
+        for (snekment, transform, orientation) in (&mut snekments, &mut transforms, &mut orientations).join() {
             let mut relative_pos = transform.translation().to_relative();
 
             // first move
-            relative_pos += match snekment.orientation {
+            relative_pos += match orientation {
                 Orientation::Up => Relative::up(),
                 Orientation::Down => Relative::down(),
                 Orientation::Left => Relative::left(),
@@ -32,16 +33,16 @@ impl<'s> System<'s> for Movement {
                 match snekment.seg_type {
                     // If a head finds a position that already exists, set the orientation to the head's
                     SegmentType::Head => {
-                        history.insert(relative_pos, snekment.orientation);
+                        history.insert(relative_pos, *orientation);
                     }
                     // If a body segment finds the coordinate, switch to the stored orientation
                     SegmentType::Body => {
-                        snekment.orientation = history[&relative_pos];
+                        *orientation = history[&relative_pos];
                     }
                     // Technically not necessary, but if a tail segment passes over a coordinate, it'll be removed from the list
                     // This is unnecessary because of what the Head does. Technically only either the head or tail logics are required.
                     SegmentType::Tail => {
-                        snekment.orientation = history[&relative_pos];
+                        *orientation = history[&relative_pos];
                         history.remove(&relative_pos);
                     }
                 }
