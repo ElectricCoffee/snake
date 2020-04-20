@@ -22,8 +22,13 @@ impl<'s> System<'s> for SnakeInput {
         Write<'s, History>,
     );
 
-    fn run(&mut self, (mut snekments, transforms, mut orientations, input, mut history): Self::SystemData) {
-        for (snekment, transform, orientation) in (&mut snekments, &transforms, &mut orientations).join() {
+    fn run(
+        &mut self,
+        (mut snekments, transforms, mut orientations, input, mut history): Self::SystemData,
+    ) {
+        for (snekment, transform, orientation) in
+            (&mut snekments, &transforms, &mut orientations).join()
+        {
             if snekment.seg_type == SegmentType::Head {
                 let x_dir = input.axis_value("horizontal");
                 let y_dir = input.axis_value("vertical");
@@ -38,17 +43,18 @@ impl<'s> System<'s> for SnakeInput {
 }
 
 fn get_direction(x: Option<f32>, y: Option<f32>) -> Option<Orientation> {
+    use Orientation::*;
     let x = x.unwrap();
     let y = y.unwrap();
 
     if x > 0. {
-        Some(Orientation::Right)
+        Some(Right)
     } else if x < 0. {
-        Some(Orientation::Left)
+        Some(Left)
     } else if y > 0. {
-        Some(Orientation::Up)
+        Some(Up)
     } else if y < 0. {
-        Some(Orientation::Down)
+        Some(Down)
     } else {
         None
     }

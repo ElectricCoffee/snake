@@ -16,8 +16,13 @@ impl<'s> System<'s> for Movement {
         Write<'s, History>,
     );
 
-    fn run(&mut self, (mut snekments, mut transforms, mut orientations, mut history): Self::SystemData) {
-        for (snekment, transform, orientation) in (&mut snekments, &mut transforms, &mut orientations).join() {
+    fn run(
+        &mut self,
+        (mut snekments, mut transforms, mut orientations, mut history): Self::SystemData,
+    ) {
+        for (snekment, transform, orientation) in
+            (&mut snekments, &mut transforms, &mut orientations).join()
+        {
             let mut relative_pos = transform.translation().to_relative();
 
             // first move
