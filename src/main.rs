@@ -44,7 +44,12 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
         .with(systems::SnakeInput, "snake_input", &["input_system"])
-        .with(systems::Movement, "movement_system", &["snake_input"]);
+        .with(systems::Movement, "movement_system", &["snake_input"])
+        .with(
+            systems::SpriteUpdater,
+            "sprite_updater",
+            &["movement_system", "snake_input"],
+        );
 
     let mut game = Application::build(assets_dir, MainState)?
         .with_frame_limit(
