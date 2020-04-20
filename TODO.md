@@ -2,9 +2,10 @@
 
 - [x] Implement the textures
 - [x] Add movement logic
-  - [ ] Add logic for handling sprite rotation
+  - [x] Add logic for handling sprite rotation
 - [ ] Add collision logic
 - [ ] Add fruit spawner
+- [ ] Add scoring system / elongate snake
 
 ## Movement Logic
 
